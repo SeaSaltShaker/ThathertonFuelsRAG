@@ -2,13 +2,22 @@ import os
 import requests
 import base64
 import configparser
+import argparse
+
+parser = argparse.ArgumentParser(description='Pass in a config file with an API key and model endpoint')
+parser.add_argument('--config', type=str, help='Path to the config file (relative or full)', default='localconfig.ini')
+
+args = parser.parse_args()
+
+if not os.path.isabs(args.config):
+    args.config = os.path.abspath(f'{os.path.dirname(os.path.realpath(__file__))}\{args.config}')
 
 config = configparser.ConfigParser()
+config.read(args.config)
 
-API_KEY = config['DEFAULT'][apiKey]
+API_KEY = config['DEFAULT']['apiKey']
 
 ENDPOINT = config['DEFAULT']['modelEndpoint']
-
 
 headers = {
     "Content-Type": "application/json",
