@@ -6,7 +6,7 @@ from string import Template
 from langchain_community.vectorstores.azuresearch import AzureSearch
 from langchain_openai import AzureOpenAIEmbeddings
 
-parser = argparse.ArgumentParser(description='Pass in a config file with an API key and model endpoint')
+parser = argparse.ArgumentParser(description='Pass in a config file with an API key and model endpoint, and a query to ask the model against data in an Azure Search service')
 parser.add_argument('--config', type=str, help='Path to the config file (relative or full)', default='localconfig.ini')
 parser.add_argument('--question', type=str, help='Question to ask the model', default='What message formats does Microsoft Graph support?')
 args = parser.parse_args()
@@ -23,12 +23,15 @@ ENDPOINT = config['OPENAI']['modelEndpoint']
 
 EMBEDDING_ENDPOINT = config['EMBEDDING']['modelEndpoint']
 EMBEDDING_API_KEY = config['EMBEDDING']['apiKey']
+EMBEDDING_MODEL = config['EMBEDDING']['model']
+EMBEDDING_VERSION = config['EMBEDDING']['version']
 
 AZS_API_KEY = config['AZURE_SEARCH']['apiKey']
 AZS_ENDPOINT = config['AZURE_SEARCH']['modelEndpoint']
+AZS_INDEX_NAME = config['AZURE_SEARCH']['indexName']
 
 RAG_Context_Query = """\
-Use the following context to answer the user's query. If you cannot answer the question using only the context, please respond with 'I don't know'.
+Use the following context to answer the user's query. If you cannot answer the question using only the context, please respond with 'I don't know.'
 
 Question:
 $question
@@ -41,17 +44,18 @@ rag_prompt = Template(RAG_Context_Query)
 embeddings = AzureOpenAIEmbeddings(
     api_key=EMBEDDING_API_KEY, 
     azure_endpoint=EMBEDDING_ENDPOINT, 
-    openai_api_version="2023-05-15", 
-    model="text-embedding-3-large"
+    openai_api_version=EMBEDDING_VERSION, 
+    model=EMBEDDING_MODEL
 )
 
 vector_store = AzureSearch(
     azure_search_key=AZS_API_KEY, 
     azure_search_endpoint=AZS_ENDPOINT,
     embedding_function=embeddings.embed_query,
-    index_name="hacka-vectors"
+    index_name=AZS_INDEX_NAME
 )
 
+# Get the closest matches to the question
 contextes = vector_store.similarity_search(
     query=args.question,
     k=3,
