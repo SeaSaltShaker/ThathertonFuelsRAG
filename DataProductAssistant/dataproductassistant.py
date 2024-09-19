@@ -1,12 +1,14 @@
 import os
 import requests
-import base64
 import configparser
 import argparse
+from string import Template
+from langchain_community.vectorstores.azuresearch import AzureSearch
+from langchain_openai import AzureOpenAIEmbeddings
 
 parser = argparse.ArgumentParser(description='Pass in a config file with an API key and model endpoint')
 parser.add_argument('--config', type=str, help='Path to the config file (relative or full)', default='localconfig.ini')
-
+parser.add_argument('--question', type=str, help='Question to ask the model', default='What time is ISO 8601 format in?')
 args = parser.parse_args()
 
 if not os.path.isabs(args.config):
@@ -15,9 +17,46 @@ if not os.path.isabs(args.config):
 config = configparser.ConfigParser()
 config.read(args.config)
 
-API_KEY = config['DEFAULT']['apiKey']
+# Three endpoints are needed: GPT-4 for the final query, an embedding model to do the vector search, and Azure Search, which holds the vector mappings
+API_KEY = config['OPENAI']['apiKey']
+ENDPOINT = config['OPENAI']['modelEndpoint']
 
-ENDPOINT = config['DEFAULT']['modelEndpoint']
+EMBEDDING_ENDPOINT = config['EMBEDDING']['modelEndpoint']
+EMBEDDING_API_KEY = config['EMBEDDING']['apiKey']
+
+AZS_API_KEY = config['AZURE_SEARCH']['apiKey']
+AZS_ENDPOINT = config['AZURE_SEARCH']['modelEndpoint']
+
+RAG_Context_Query = """\
+Use the following context to answer the user's query. If you cannot answer the question using only the context, please respond with 'I don't know'.
+
+Question:
+$question
+
+Context:
+$context
+"""
+rag_prompt = Template(RAG_Context_Query)
+
+embeddings = AzureOpenAIEmbeddings(
+    api_key=API_KEY, 
+    azure_endpoint=EMBEDDING_API_KEY, 
+    openai_api_version="2023-05-15", 
+    model="text-embedding-3-large"
+)
+
+vector_store = AzureSearch(
+    azure_search_key=AZS_API_KEY, 
+    azure_search_endpoint=AZS_ENDPOINT,
+    embedding_function=embeddings.embed_query,
+    index_name="hacka-vectors"
+)
+
+contextes = vector_store.similarity_search(
+    query=args.question,
+    k=3,
+    search_type="similarity",
+)
 
 headers = {
     "Content-Type": "application/json",
@@ -41,7 +80,8 @@ payload = {
       "content": [
         {
           "type": "text",
-          "text": "Where should I go for a vacation?"
+          # I concatenate all the closest matches to provide the greatest context
+          "text": rag_prompt.substitute(question=args.question, context=" ".join([context.page_content for context in contextes]))
         }
       ]
     }
@@ -51,9 +91,9 @@ payload = {
   "max_tokens": 800
 }
 
-
 # Send request
 try:
+    print(f"Query: {rag_prompt.substitute(question=args.question, context=' '.join([context.page_content for context in contextes]))}")
     response = requests.post(ENDPOINT, headers=headers, json=payload)
     response.raise_for_status()  # Will raise an HTTPError if the HTTP request returned an unsuccessful status code
 except requests.RequestException as e:

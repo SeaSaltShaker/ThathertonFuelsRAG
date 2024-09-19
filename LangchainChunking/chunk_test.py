@@ -7,8 +7,8 @@ import json
 config = configparser.ConfigParser()
 config.read(f'{os.path.dirname(os.path.realpath(__file__))}\..\DataProductAssistant\localconfig.ini')
 
-OPENAI_API_KEY = config['OPENAI']['apiKey']
-OPENAI_ENDPOINT = config['OPENAI']['modelEndpoint']
+OPENAI_API_KEY = config['EMBEDDING']['apiKey']
+OPENAI_ENDPOINT = config['EMBEDDING']['modelEndpoint']
 
 AZS_API_KEY = config['AZURE_SEARCH']['apiKey']
 AZS_ENDPOINT = config['AZURE_SEARCH']['modelEndpoint']
@@ -35,14 +35,18 @@ vector_store = AzureSearch(
 )
 
 # Not sure if this is the right way to add the document vectors. The add_embeddings() method expects Iterable[Tuple[str, List[float]]]
-document_vectors.append(("test_doc", embeddings.embed_query(document['cleanedChunk'])))
+document_vectors.append((document['Summary'], embeddings.embed_query(document['cleanedChunk'])))
 
-document_vectors.append(("test_query",embeddings.embed_query('this is a test')))
+document_vectors.append(("this is a test",embeddings.embed_query('this is a test')))
+
+for property in document["properties"]:
+    document_vectors.append((property["description"], embeddings.embed_query(property["description"])))
+
 vector_store.add_embeddings(document_vectors)
 
 # Use the first question as the query
 docs = vector_store.similarity_search(
-    query=document["Questions"][0]["question"],
+    query="Can I supply HTML content in the body of the message?",
     k=3,
     search_type="similarity",
 )
@@ -50,5 +54,6 @@ docs = vector_store.similarity_search(
 # Errors out here..
 if docs:
     print(docs[0].page_content)
+
 else:
     print("No documents found")
