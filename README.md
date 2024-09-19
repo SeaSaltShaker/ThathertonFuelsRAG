@@ -1,6 +1,6 @@
 # ThathertonFuelsRAG
 
-Is a investigation/forray into RAG utilizing resources available in a Microsoft Azure Subscription.
+Is an investigation/forray into RAG utilizing resources available in a Microsoft Azure Subscription.
 
 `LangChainTests\gen_embeddings.py` will generate embeddings based on `document.json`, which is assumed to be already chunked in some way. These embeddings are stored in an Azure Serach Service object provided based on the provided `config.ini` file.
 
