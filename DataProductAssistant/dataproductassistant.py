@@ -7,7 +7,7 @@ from langchain_community.vectorstores.azuresearch import AzureSearch
 from langchain_openai import AzureOpenAIEmbeddings
 
 parser = argparse.ArgumentParser(description='Pass in a config file with an API key and model endpoint, and a query to ask the model against data in an Azure Search service')
-parser.add_argument('--config', type=str, help='Path to the config file (relative or full)', default='localconfig.ini')
+parser.add_argument('--config', type=str, help='Path to the config file (relative or full)', default='..\localconfig.ini')
 parser.add_argument('--question', type=str, help='Question to ask the model', default='What message formats does Microsoft Graph support?')
 args = parser.parse_args()
 
