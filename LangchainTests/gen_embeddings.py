@@ -43,17 +43,3 @@ for property in document["properties"]:
     document_vectors.append((property["description"], embeddings.embed_query(property["description"])))
 
 vector_store.add_embeddings(document_vectors)
-
-# Use the first question as the query
-docs = vector_store.similarity_search(
-    query="Can I supply HTML content in the body of the message?",
-    k=3,
-    search_type="similarity",
-)
-
-# Errors out here..
-if docs:
-    print(docs[0].page_content)
-
-else:
-    print("No documents found")
