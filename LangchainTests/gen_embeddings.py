@@ -28,7 +28,7 @@ document = None
 document_vectors = list()
 
 # Assuming the chunked json file that's in the loop
-with open(f'{os.path.dirname(os.path.realpath(__file__))}\document.json', 'r') as in_doc:
+with open(f'{os.path.dirname(os.path.realpath(__file__))}\document2.json', 'r') as in_doc:
     document = json.load(in_doc)
 
 embeddings = AzureOpenAIEmbeddings(
@@ -45,10 +45,7 @@ vector_store = AzureSearch(
     index_name=AZS_INDEX_NAME
 )
 
-# Not sure if this is the right way to add the document vectors. The add_embeddings() method expects Iterable[Tuple[str, List[float]]]
-document_vectors.append((document['Summary'], embeddings.embed_query(document['cleanedChunk'])))
-
-for property in document["properties"]:
-    document_vectors.append((property["description"], embeddings.embed_query(property["description"])))
+for chunk in document["Chunks"]:
+    document_vectors.append((chunk["cleanedChunk"], embeddings.embed_query(chunk["cleanedChunk"])))
 
 vector_store.add_embeddings(document_vectors)
