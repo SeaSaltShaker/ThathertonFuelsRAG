@@ -1,0 +1,24 @@
+{
+    "Chunks": [
+        {
+            "Title": "Overview",
+            "cleanedChunk": "Microsoft Graph Mail Author: Stewart Wainaina Summary: Enables developers to access and manage Outlook mail data, including emails, calendar events, and personal contacts. Supports tasks such as reading, sending, organizing messages, and automating workflows based on specific criteria."
+        },
+        {
+            "Title": "Key Features",
+            "cleanedChunk": "Keywords: Outlook, Email, Message, Inbox, Drafts, Sent Items, Deleted Items, Folders, Categories, Attachments, Permissions, Calendar Events, Personal Contacts. Capabilities: Read, reply, forward, send, update, delete, and organize messages. Supports HTML, text, and MIME message formats. Interaction with well-known folders like Inbox, Drafts, Sent Items, Deleted Items."
+        },
+        {
+            "Title": "Technical Properties",
+            "cleanedChunk": "Properties: bccRecipients: Bcc: recipients for the message. body: Body of the message in HTML or text format. categories: Categories associated with the message. ccRecipients: Cc: recipients for the message. createdDateTime: Date and time the message was created. from: The owner of the mailbox from which the message is sent."
+        },
+        {
+            "Title": "Additional Properties",
+            "cleanedChunk": "hasAttachments: Indicates if the message has attachments (excluding inline). importance: Importance of the message (low, normal, high). isDeliveryReceiptRequested: If a read receipt is requested. isRead: Indicates if the message has been read. lastModifiedDateTime: Last change date and time."
+        },
+        {
+            "Title": "Further Properties and Questions",
+            "cleanedChunk": "Continuation of Properties: receivedDateTime, sender, sentDateTime, subject, toRecipients, attachments."
+        }
+    ]
+}

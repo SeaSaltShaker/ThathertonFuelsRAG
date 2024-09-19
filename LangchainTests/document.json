@@ -1,0 +1,138 @@
+
+{
+  "Title": "Microsoft Graph Mail",
+  "AuthorInformation": ["Stewart Wainaina", "Deric Desronvil", "Travis Golob"],
+  "Summary": "The Microsoft Graph Mail data enables developers to access and manage Outlook mail data, including emails, calendar events, and personal contacts. With the right permissions, apps can perform tasks such as reading, sending, and organizing messages, as well as automating workflows to handle incoming emails based on specific criteria. This data supports various message formats, including HTML, text, and MIME, providing flexibility in how emails are handled. Additionally, it allows interaction with well-known folders like Inbox, Drafts, Sent Items, and Deleted Items, making it easier to organize and categorize messages.",
+  "cleanedChunk": "microsoft graph mail data enables developers to access manage outlook mail data including emails calendar events personal contacts. permissions apps perform tasks such reading sending organizing messages automating workflows handle incoming emails based specific criteria. data supports various message formats including html text mime providing flexibility emails handled. additionally allows interaction well-known folders inbox drafts sent items deleted items making easier organize categorize messages.",
+  "KeywordsTags": [
+    "Outlook",
+    "Mail",
+    "Email",
+    "Message",
+    "Inbox",
+    "Drafts",
+    "Sent Items",
+    "Deleted Items",
+    "Folders",
+    "Categories",
+    "Importance",
+    "Attachments",
+    "Text Format",
+    "Permissions",
+    "Primary Mailbox",
+    "Shared Mailbox",
+    "Calendar Events",
+    "Personal Contacts",
+    "Message Management",
+    "Read",
+    "Reply",
+    "Forward",
+    "Send",
+    "Update",
+    "Delete",
+    "Organize Messages",
+    "Rules",
+    "Productivity"
+],
+  "DocumentType": "Technical Documentation",
+  "Language": "English",
+  "DocumentVersion": "1.0",
+  "properties": [
+    {
+      "name": "bccRecipients",
+      "type": "microsoft.graph.recipient collection",
+      "description": "The Bcc: recipients for the message."
+    },
+    {
+      "name": "body",
+      "type": "microsoft.graph.itemBody",
+      "description": "The body of the message. It can be in HTML or text format."
+    },
+    {
+      "name": "categories",
+      "type": "string collection",
+      "description": "The categories associated with the message."
+    },
+    {
+      "name": "ccRecipients",
+      "type": "microsoft.graph.recipient collection",
+      "description": "The Cc: recipients for the message."
+    },
+    {
+      "name": "createdDateTime",
+      "type": "timestamp",
+      "description": "The date and time the message was created. Uses ISO 8601 format and is always in UTC time."
+    },
+    {
+      "name": "from",
+      "type": "microsoft.graph.recipient",
+      "description": "The owner of the mailbox from which the message is sent."
+    },
+    {
+      "name": "hasAttachments",
+      "type": "boolean",
+      "description": "Indicates whether the message has attachments. This property doesn't include inline attachments."
+    },
+    {
+      "name": "importance",
+      "type": "string",
+      "description": "The importance of the message. Possible values are: low, normal, and high."
+    },
+    {
+      "name": "isDeliveryReceiptRequested",
+      "type": "boolean",
+      "description": "Indicates whether a read receipt is requested for the message."
+    },
+    {
+      "name": "isRead",
+      "type": "boolean",
+      "description": "Indicates whether the message has been read."
+    },
+    {
+      "name": "lastModifiedDateTime",
+      "type": "timestamp",
+      "description": "The date and time the message was last changed. Uses ISO 8601 format and is always in UTC time."
+    },
+    {
+      "name": "receivedDateTime",
+      "type": "timestamp",
+      "description": "The date and time the message was received. Uses ISO 8601 format and is always in UTC time."
+    },
+    {
+      "name": "sender",
+      "type": "microsoft.graph.recipient",
+      "description": "The account that is actually used to generate the message."
+    },
+    {
+      "name": "sentDateTime",
+      "type": "timestamp",
+      "description": "The date and time the message was sent. Uses ISO 8601 format and is always in UTC time."
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "description": "The subject of the message."
+    },
+    {
+      "name": "toRecipients",
+      "type": "microsoft.graph.recipient collection",
+      "description": "The To: recipients for the message."
+    },
+    {
+      "name": "attachments",
+      "type": "microsoft.graph.attachment collection",
+      "description": "The attachments for the message."
+    }
+  ],
+  "Questions": [
+    {
+        "question": "What is the difference between the 'sender' and 'from' fields, and how are they represented in the dataset?",
+        "answer": "The 'sender' field represents the account that generated the message, while the 'from' field represents the mailbox owner. Both are structured as STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>."
+      },
+      {
+        "question": "In what circumstances would a message be marked as a draft, and how is this indicated in the dataset?",
+        "answer": "A message is marked as a draft if it hasn’t been sent yet. This is indicated by the 'isDraft' boolean field."
+      }
+  ]
+}
+
