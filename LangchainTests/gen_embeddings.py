@@ -37,8 +37,6 @@ vector_store = AzureSearch(
 # Not sure if this is the right way to add the document vectors. The add_embeddings() method expects Iterable[Tuple[str, List[float]]]
 document_vectors.append((document['Summary'], embeddings.embed_query(document['cleanedChunk'])))
 
-document_vectors.append(("this is a test",embeddings.embed_query('this is a test')))
-
 for property in document["properties"]:
     document_vectors.append((property["description"], embeddings.embed_query(property["description"])))
 

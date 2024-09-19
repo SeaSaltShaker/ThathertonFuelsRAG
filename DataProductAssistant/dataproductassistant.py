@@ -8,7 +8,7 @@ from langchain_openai import AzureOpenAIEmbeddings
 
 parser = argparse.ArgumentParser(description='Pass in a config file with an API key and model endpoint')
 parser.add_argument('--config', type=str, help='Path to the config file (relative or full)', default='localconfig.ini')
-parser.add_argument('--question', type=str, help='Question to ask the model', default='What time is ISO 8601 format in?')
+parser.add_argument('--question', type=str, help='Question to ask the model', default='What message formats does Microsoft Graph support?')
 args = parser.parse_args()
 
 if not os.path.isabs(args.config):
@@ -39,8 +39,8 @@ $context
 rag_prompt = Template(RAG_Context_Query)
 
 embeddings = AzureOpenAIEmbeddings(
-    api_key=API_KEY, 
-    azure_endpoint=EMBEDDING_API_KEY, 
+    api_key=EMBEDDING_API_KEY, 
+    azure_endpoint=EMBEDDING_ENDPOINT, 
     openai_api_version="2023-05-15", 
     model="text-embedding-3-large"
 )
